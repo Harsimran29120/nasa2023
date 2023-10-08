@@ -1,0 +1,35 @@
+<head>
+  <style> body { margin: 0; } </style>
+
+  <script src="//unpkg.com/d3"></script>
+
+  <script src="//unpkg.com/aframe"></script>
+  <script src="//unpkg.com/@ar-js-org/ar.js"></script>
+
+  <script src="//unpkg.com/globe-ar"></script>
+  <!--<script src="../../dist/globe-ar.js"></script>-->
+</head>
+
+<body>
+  <div id="globeViz"></div>
+
+  <script>
+    const weightColor = d3.scaleLinear()
+      .domain([0, 60])
+      .range(['lightblue', 'darkred'])
+      .clamp(true);
+
+    const myGlobe = GlobeAR()
+      .globeImageUrl('../moont.png')
+      .hexBinPointLat(d => d.geometry.coordinates[1])
+      .hexBinPointLng(d => d.geometry.coordinates[0])
+      .hexBinPointWeight(d => d.properties.mag)
+      .hexAltitude(({ sumWeight }) => Math.max(0.01, sumWeight * 0.0025))
+      .hexTopColor(d => weightColor(d.sumWeight))
+      .hexSideColor(d => weightColor(d.sumWeight))
+      (document.getElementById('globeViz'));
+
+    
+
+  </script>
+</body>
